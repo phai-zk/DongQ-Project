@@ -69,8 +69,6 @@ public class Main {
 
         System.out.println("====== Customer View Status ======");
         customers.get(0).veiwOrderStatus();
-        System.out.println("====== Customer recieved order ======");
-        customers.get(0).pickUpOrder();
     }
 
     // ลูกค้า

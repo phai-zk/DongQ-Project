@@ -58,6 +58,10 @@ public class Customer extends User {
     }
 
     public void recievedOrder() {
+        Order order = QueueManager.getOrderQueue(userId).peek();
+        if (order.getStatus() != OrderStatus.COMPLETED) return;
+        if (order.getStatus() != OrderStatus.REJECTED) return;
+
         QueueManager.getOrderQueue(userId).poll();
         QueueManager.displayCurrentQueue(userId);
     }

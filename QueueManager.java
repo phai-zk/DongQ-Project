@@ -10,7 +10,7 @@ public class QueueManager {
     static public void assignQueue(Order order) {
         String restuarantId = order.getRestaurant().getUserId();
         String customerId = order.getCustomerId();
-
+        System.out.println(restuarantId);
         queueList.putIfAbsent(restuarantId, new PriorityQueue<>(Comparator.comparing(Order::getRequestedPickupTime)));
         queueList.get(restuarantId).add(order); // พอ Add เข้าไป มันจะจัดเรียงตำแหน่งให้เองอัตโนมัติ
 
@@ -26,7 +26,7 @@ public class QueueManager {
         int qNumber = 1;
         while (!tempQueue.isEmpty()) {
             Order o = tempQueue.poll();
-            System.out.println("Queue #" + qNumber + " | Order: " + o.getOrderId() + " | Time: " + o.getRequestedPickupTime());
+            System.out.println("Queue #" + qNumber + " | Status: " + o.getStatus() + " | Order: " + o.getOrderId() + " | Time: " + o.getRequestedPickupTime());
             qNumber++;
         }
         System.out.println("---------------------------------------------");

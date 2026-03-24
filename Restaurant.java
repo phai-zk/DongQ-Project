@@ -50,6 +50,7 @@ public class Restaurant extends User {
 	}
 
 	public void displayQueue() {
+		System.out.println(this.userId);
 		QueueManager.displayCurrentQueue(this.userId);
 	}
 
@@ -71,9 +72,9 @@ public class Restaurant extends User {
 		displayQueue();
 		PriorityQueue<Order> queue = QueueManager.getOrderQueue(userId);
 		List<Order> orderList = new ArrayList<>(queue);
-		System.out.print("Accept Order: ");
+		System.out.print("Cancle Order: ");
 		int idx = sc.nextInt();
-		QueueManager.cancleOrder(userId, orderList.get(idx));
+		QueueManager.cancleOrder(userId, orderList.get(idx - 1));
 	}
 
 	// เมธอดนี้ให้ลูกค้าเรียกดูเมนูของร้าน

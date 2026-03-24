@@ -14,8 +14,9 @@ public class Main {
     public static void main(String[] args) {
         initailize();
         System.out.println();
-        // customerWorkFlow();
-        // System.out.println();
+        customerWorkFlow();
+        System.out.println();
+        System.out.println("Restaurant WorkFlow");
         restaurantWorkFlow();
     }
 
@@ -47,24 +48,28 @@ public class Main {
     }
 
     static void restaurantWorkFlow() {
-        customerLogin();
-        customerOrdered();
-        customerOrdered();
         Restaurant restaurant = restaurants.get(0);
         if (!restaurant.login("1234@gmail.com", "1234")) return;
-        restaurant.displayQueue();
-        restaurant.cancleOrder();
-        
+
+        System.out.println("====== Set PreParing ======");
         restaurant.setPreParing();
-        System.out.println();
         restaurant.displayQueue();
-
+        
+        System.out.println("====== Set Cancle ======");
+        restaurant.cancleOrder();
+        restaurant.displayQueue();
+        
+        System.out.println("====== Set Finish ======");
         restaurant.setFinish();
-        System.out.println();
         restaurant.displayQueue();
 
+        System.out.println();
+        System.out.println("====== View Feedback ======");
         restaurant.viewFeedback();
+
+        System.out.println("====== Customer View Status ======");
         customers.get(0).veiwOrderStatus();
+        System.out.println("====== Customer recieved order ======");
         customers.get(0).recievedOrder();
     }
 
@@ -76,11 +81,11 @@ public class Main {
             return false;
         boolean login1 = customer1.login("Ice@gmail.com", "lnwza");
 
-        // Customer customer2 = new Customer();
-        // regisSuccess = customer2.register("Beam", "Beam@gmail.com", "0000000000", "lnwza", "lnwza");
-        // if (!regisSuccess)
-        //     return false;
-        // boolean login2 = customer2.login("Beam@gmail.com", "lnwza");
+        Customer customer2 = new Customer(sc);
+        regisSuccess = customer2.register("Beam", "Beam@gmail.com", "0000000000", "lnwza", "lnwza");
+        if (!regisSuccess)
+            return false;
+        boolean login2 = customer2.login("Beam@gmail.com", "lnwza");
 
         // Customer customer3 = new Customer();
         // regisSuccess = customer3.register("Anwa", "Anwa@gmail.com", "0000000000", "lnwza", "lnwza");
@@ -89,9 +94,9 @@ public class Main {
         // boolean login3 = customer3.login("Anwa@gmail.com", "lnwza");
 
         customers.add(customer1);
-        // customers.add(customer2);
+        customers.add(customer2);
         // customers.add(customer3);
-        return login1;
+        return login1 && login2;
     }
 
     static List<Order> customerOrdered() {

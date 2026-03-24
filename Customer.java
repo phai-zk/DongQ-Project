@@ -1,9 +1,13 @@
 import java.util.*;
 
 public class Customer extends User {
+    private Scanner sc;
+
+    public Customer(Scanner sc) {
+        this.sc = sc;
+    }
 
     public Restaurant selectedShops(List<Restaurant> restaurants) {
-        Scanner sc = new Scanner(System.in);
         int idx;
         
         for (int i = 0; i < restaurants.size(); i++) {
@@ -23,7 +27,6 @@ public class Customer extends User {
 
     public OrderItem selectedMenu(Restaurant restaurant) {
         List<MenuItem> menuItems = restaurant.getMenu();
-        Scanner sc = new Scanner(System.in);
         int idx;
         int qty = 0;
         restaurant.showMenu();
@@ -42,7 +45,6 @@ public class Customer extends User {
     
     public void sentFeedBack(Order order) {
         Feedback feedback = new Feedback(username);
-        Scanner sc = new Scanner(System.in);
         System.out.print("Rate (0-5): ");
         int rate = sc.nextInt();
         System.out.print("Comment: ");

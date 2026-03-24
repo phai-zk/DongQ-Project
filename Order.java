@@ -44,6 +44,10 @@ public class Order {
         }
     }
 
+    public void updateStatus(OrderStatus status) {
+        this.status = status;
+    }
+
     // --- Getters ---
     public String getOrderId() { return orderId; }
     public String getCustomerId() { return customerId; }

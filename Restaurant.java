@@ -8,12 +8,14 @@ public class Restaurant extends User {
 	private LocalDateTime openTime;
 	private LocalDateTime closeTime;
 	private List<Feedback> feedbacks;
+	private QueueManager queueManager;
 	
 	// *** เพิ่มตัวแปรเก็บรายการอาหารของร้าน ***
 	private List<MenuItem> menuList;
 	public Restaurant(String name) {
 		this.menuList = new ArrayList<>(); // สร้าง List ว่างๆ รอไว้
 		this.feedbacks = new ArrayList<>();
+		this.queueManager = new QueueManager();
 		this.name = name;
 	}
 
@@ -39,6 +41,14 @@ public class Restaurant extends User {
 			MenuItem menu = menuList.get(i);
             System.out.println("[" + (i + 1) + "]\t" + menu.getName() + "\t" + menu.getPrice()+" Bath");
         }
+	}
+
+	public void assignQueue(Order order) {
+		queueManager.assignQueue(order);
+	}
+
+	public void displayQueue() {
+		queueManager.displayCurrentQueue();
 	}
 
 	// เมธอดนี้ให้ลูกค้าเรียกดูเมนูของร้าน

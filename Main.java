@@ -4,19 +4,18 @@ import java.util.List;
 import java.util.Scanner;
 
 public class Main {
-
+    
+    static Scanner sc = new Scanner(System.in);
     static List<Restaurant> restaurants;
     static List<Customer> customers;
     static PaymentGateway gateway;
     static Notification notification;
-    static QueueManager queueManager;
 
     public static void main(String[] args) {
         restaurants = new ArrayList<>();
         customers = new ArrayList<>();
         gateway = new PaymentGateway();
         notification = new Notification();
-        queueManager = new QueueManager();
 
         System.out.println("======= Restuarant Setup ========");
         restaurantRegister();
@@ -32,39 +31,38 @@ public class Main {
         System.out.println("======= Ordering ========");
         List<Order> orders = customerOrdered();
         for (int i = 0; i < customers.size(); i++) {
-            customerPay(orders.get(i));
-            customerGiveFeedback(customers.get(i) , orders.get(i));
+            customerPay(orders.get(i).getRestaurant(), orders.get(i));
+            customerGiveFeedback(customers.get(i), orders.get(i));
         }
     }
 
     // ลูกค้า
     static boolean customerLogin() {
-        Customer customer1 = new Customer();
+        Customer customer1 = new Customer(sc);
         boolean regisSuccess = customer1.register("Ice", "Ice@gmail.com", "0000000000", "lnwza", "lnwza");
         if (!regisSuccess)
             return false;
         boolean login1 = customer1.login("Ice@gmail.com", "lnwza");
 
-        Customer customer2 = new Customer();
-        regisSuccess = customer2.register("Beam", "Beam@gmail.com", "0000000000", "lnwza", "lnwza");
-        if (!regisSuccess)
-            return false;
-        boolean login2 = customer2.login("Beam@gmail.com", "lnwza");
+        // Customer customer2 = new Customer();
+        // regisSuccess = customer2.register("Beam", "Beam@gmail.com", "0000000000", "lnwza", "lnwza");
+        // if (!regisSuccess)
+        //     return false;
+        // boolean login2 = customer2.login("Beam@gmail.com", "lnwza");
 
-        Customer customer3 = new Customer();
-        regisSuccess = customer3.register("Anwa", "Anwa@gmail.com", "0000000000", "lnwza", "lnwza");
-        if (!regisSuccess)
-            return false;
-        boolean login3 = customer3.login("Anwa@gmail.com", "lnwza");
+        // Customer customer3 = new Customer();
+        // regisSuccess = customer3.register("Anwa", "Anwa@gmail.com", "0000000000", "lnwza", "lnwza");
+        // if (!regisSuccess)
+        //     return false;
+        // boolean login3 = customer3.login("Anwa@gmail.com", "lnwza");
 
         customers.add(customer1);
-        customers.add(customer2);
-        customers.add(customer3);
-        return login1 && login2 && login3;
+        // customers.add(customer2);
+        // customers.add(customer3);
+        return login1;
     }
 
     static List<Order> customerOrdered() {
-        Scanner sc = new Scanner(System.in);
         List<Order> orders = new ArrayList<>();
         for (Customer customer : customers) {
             Restaurant restaurant = customer.selectedShops(restaurants);
@@ -88,7 +86,6 @@ public class Main {
                 int m = Integer.parseInt(timeSTR[1]);
                 pickupTime = LocalDateTime.now().withHour(h).withMinute(m);
             } catch (Exception e) {
-                sc.close();
                 return null;
             }
 
@@ -99,16 +96,15 @@ public class Main {
             }
             orders.add(order);
         }
-        sc.close();
         return orders;
     }
 
-    static void customerPay(Order order) {
+    static void customerPay(Restaurant restaurant, Order order) {
         Payment payment = new Payment(PaymentMethod.E_WALLET, order.getTotalAmount(), order.getOrderId());
         payment.processPayment(gateway, order, notification);
 
         if (payment.getStatus() == PaymentStatus.SUCCESS) {
-            queueManager.assignQueue(order);
+            restaurant.assignQueue(order);
         }
     }
 

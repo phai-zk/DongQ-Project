@@ -52,4 +52,14 @@ public class Customer extends User {
         String comment = sc.nextLine();         
         feedback.sentFeedback(rate, comment, order);
     }
+
+    public void veiwOrderStatus() {
+        QueueManager.displayCurrentQueue(userId);
+    }
+
+    public void recievedOrder() {
+        QueueManager.getOrderQueue(userId).poll();
+        QueueManager.displayCurrentQueue(userId);
+    }
+
 }

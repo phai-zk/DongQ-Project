@@ -1,21 +1,23 @@
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.PriorityQueue;
+import java.util.Scanner;
 
 public class Restaurant extends User {
-	private String restaurantId;
 	private String name;
 	private LocalDateTime openTime;
 	private LocalDateTime closeTime;
 	private List<Feedback> feedbacks;
-	private QueueManager queueManager;
 	
 	// *** เพิ่มตัวแปรเก็บรายการอาหารของร้าน ***
 	private List<MenuItem> menuList;
-	public Restaurant(String name) {
+	private Scanner sc;
+
+	public Restaurant(String name, Scanner sc) {
 		this.menuList = new ArrayList<>(); // สร้าง List ว่างๆ รอไว้
 		this.feedbacks = new ArrayList<>();
-		this.queueManager = new QueueManager();
+		this.sc = sc;
 		this.name = name;
 	}
 
@@ -44,11 +46,34 @@ public class Restaurant extends User {
 	}
 
 	public void assignQueue(Order order) {
-		queueManager.assignQueue(order);
+		QueueManager.assignQueue(order);
 	}
 
 	public void displayQueue() {
-		queueManager.displayCurrentQueue();
+		QueueManager.displayCurrentQueue(this.userId);
+	}
+
+	public void setPreParing() {
+		PriorityQueue<Order> queue = QueueManager.getOrderQueue(userId);
+		Order order = queue.peek();
+		order.updateStatus(OrderStatus.PREPARING);
+		Notification.sendNotification("Your Order in preparing.");
+	}
+
+	public void setFinish() {
+		PriorityQueue<Order> queue = QueueManager.getOrderQueue(userId);
+		Order order = queue.poll();
+		order.updateStatus(OrderStatus.COMPLETED);
+		Notification.sendNotification("Your Order is finish.");
+	}
+
+	public void cancleOrder() {
+		displayQueue();
+		PriorityQueue<Order> queue = QueueManager.getOrderQueue(userId);
+		List<Order> orderList = new ArrayList<>(queue);
+		System.out.print("Accept Order: ");
+		int idx = sc.nextInt();
+		QueueManager.cancleOrder(userId, orderList.get(idx));
 	}
 
 	// เมธอดนี้ให้ลูกค้าเรียกดูเมนูของร้าน
@@ -67,7 +92,7 @@ public class Restaurant extends User {
 	}
 
 	// --- Getters & Setters ---
-	public String getRestaurantId() { return restaurantId; }
+	public String getRestaurantId() { return userId; }
 
 	public String getName() { return this.name; }
 	public void setName(String name) { this.name = name; }

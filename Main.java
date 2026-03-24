@@ -12,28 +12,60 @@ public class Main {
     static Notification notification;
 
     public static void main(String[] args) {
+        initailize();
+        System.out.println();
+        // customerWorkFlow();
+        // System.out.println();
+        restaurantWorkFlow();
+    }
+
+    static void initailize() {
         restaurants = new ArrayList<>();
         customers = new ArrayList<>();
         gateway = new PaymentGateway();
         notification = new Notification();
 
-        System.out.println("======= Restuarant Setup ========");
+        System.out.println("======= Restuarant Setup =======");
         restaurantRegister();
         restaurantSetAvalible();
         restaurantAddMenu();
         restaurantUpdatemunu();
         restaurantRemoveMenu();
-        System.out.println();
+        System.out.println("================================");
+    }
+
+    static void customerWorkFlow() {
         System.out.println("======= Customer ========");
         boolean status = customerLogin();
-        if (!status)
-            return;
+        if (!status) return;
         System.out.println("======= Ordering ========");
         List<Order> orders = customerOrdered();
         for (int i = 0; i < customers.size(); i++) {
             customerPay(orders.get(i).getRestaurant(), orders.get(i));
             customerGiveFeedback(customers.get(i), orders.get(i));
         }
+    }
+
+    static void restaurantWorkFlow() {
+        customerLogin();
+        customerOrdered();
+        customerOrdered();
+        Restaurant restaurant = restaurants.get(0);
+        if (!restaurant.login("1234@gmail.com", "1234")) return;
+        restaurant.displayQueue();
+        restaurant.cancleOrder();
+        
+        restaurant.setPreParing();
+        System.out.println();
+        restaurant.displayQueue();
+
+        restaurant.setFinish();
+        System.out.println();
+        restaurant.displayQueue();
+
+        restaurant.viewFeedback();
+        customers.get(0).veiwOrderStatus();
+        customers.get(0).recievedOrder();
     }
 
     // ลูกค้า
@@ -65,6 +97,7 @@ public class Main {
     static List<Order> customerOrdered() {
         List<Order> orders = new ArrayList<>();
         for (Customer customer : customers) {
+            System.out.println(customer.getUserName());
             Restaurant restaurant = customer.selectedShops(restaurants);
             char isBuy;
             List<OrderItem> orderItems = new ArrayList<>();
@@ -101,7 +134,7 @@ public class Main {
 
     static void customerPay(Restaurant restaurant, Order order) {
         Payment payment = new Payment(PaymentMethod.E_WALLET, order.getTotalAmount(), order.getOrderId());
-        payment.processPayment(gateway, order, notification);
+        payment.processPayment(gateway, order);
 
         if (payment.getStatus() == PaymentStatus.SUCCESS) {
             restaurant.assignQueue(order);
@@ -116,13 +149,13 @@ public class Main {
     static void restaurantRegister() {
         boolean isSucces;
 
-        Restaurant shop1 = new Restaurant("Auntie's Thai Kitchen");
+        Restaurant shop1 = new Restaurant("Auntie's Thai Kitchen", sc);
         isSucces = shop1.register("ICE 1", "1234@gmail.com", "0970465847", "1234", "1234");
 
         if (!isSucces)
             return;
 
-        Restaurant shop2 = new Restaurant("Tokyo Sushi Bar");
+        Restaurant shop2 = new Restaurant("Tokyo Sushi Bar", sc);
         isSucces = shop2.register("ICE 2", "1234@gmail.com", "0970465847", "1234", "1234");
         if (!isSucces)
             return;

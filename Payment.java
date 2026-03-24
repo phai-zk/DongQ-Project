@@ -13,12 +13,12 @@ public class Payment {
     }
 
     // *** จุดที่แก้ไข: เปลี่ยนพารามิเตอร์ตัวที่ 2 จาก Receipt เป็น Order ***
-    public void processPayment(PaymentGateway gateway, Order order, Notification notification) {
+    public void processPayment(PaymentGateway gateway, Order order) {
         boolean isSuccess = gateway.pay(this.amount, this.orderId);
         
         if (isSuccess) {
             this.status = PaymentStatus.SUCCESS;
-            notification.sendNotification("Payment Success for order " + this.orderId);
+            Notification.sendNotification("Payment Success for order " + this.orderId);
             
             // *** จุดที่แก้ไข: สร้าง Receipt ใหม่ตรงนี้โดยส่ง order เข้าไป แล้วสั่งพิมพ์ ***
             Receipt receipt = new Receipt(order);
@@ -26,7 +26,7 @@ public class Payment {
             
         } else {
             this.status = PaymentStatus.FAILED;
-            notification.sendNotification("Payment Failed for order " + this.orderId);
+            Notification.sendNotification("Payment Failed for order " + this.orderId);
         }
     }
 

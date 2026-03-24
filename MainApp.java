@@ -4,8 +4,6 @@ import java.util.List;
 
 public class MainApp {
     public static void main(String[] args) {
-        // --- ส่วนเตรียมข้อมูลของระบบ (System Setup) ---
-        // 1. จำลองว่าแอปนี้มีร้านค้าลงทะเบียนไว้ 2 ร้าน
         Restaurant shop1 = new Restaurant("R001", "Auntie's Thai Kitchen");
         shop1.addMenu(new MenuItem("M01", "Basil Fried Rice", 60.0));
         shop1.addMenu(new MenuItem("M02", "Fried Egg", 10.0));

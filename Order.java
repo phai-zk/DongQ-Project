@@ -12,6 +12,7 @@ public class Order {
     private List<OrderItem> items;
     private double totalAmount;
     private LocalDateTime requestedPickupTime;
+    private LocalDateTime createAt;
     private String queueNumber;
     private OrderStatus status;
 
@@ -21,6 +22,7 @@ public class Order {
         this.customerId = customerId;
         this.restaurant = restaurant; // เก็บข้อมูลร้าน
         this.requestedPickupTime = requestedPickupTime;
+        this.createAt = LocalDateTime.now();
         this.items = new ArrayList<>();
         this.status = OrderStatus.WAITING;
         assignQueueNumber();
@@ -32,6 +34,7 @@ public class Order {
 
     public void addOrderItem(OrderItem item) {
         this.items.add(item);
+        calculateTotal();
     }
 
     public void calculateTotal() {

@@ -1,4 +1,4 @@
 public enum PaymentMethod {
-    E_WALLET,
-    PROMPTPAY
+	E_WALLET,
+	PROMPTPAY
 }

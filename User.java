@@ -12,7 +12,7 @@ public abstract class User {
         userId = username.substring(0, 5);
         this.username = username;
         this.password = password;
-        phone = "000-000-0000";
+        phone = "0000000000";
         System.out.println("Login Success! Welcome " + this.username);
         return true;
     }
